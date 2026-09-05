@@ -1,21 +1,78 @@
 const mongoose=require('mongoose')
+const validator=require("validator")
 
 const userSchema= new mongoose.Schema({
     fName:{
-        type:String
+        type:String,
+        required:true,
+        minLength:3,
+        maxLength:50,
     },
     Lname:{
-        type:String
+        type:String,
     },
     emailId:{
-        type:String
+        type:String,
+        required:true,
+        trim:true,
+        lowercase:true,
+        unique:true,
+        validate(value){
+         if(!validator.isEmail(value)){
+            throw new Error("Invalid id:" + value)
+         }
+        }
+
     },
     password:{
-        type:String
+        type:String,
+        required:true,
+
+        
+        // HARD CODED VALIDATION
+        // validate:[
+        //     {
+        //         validator:function(password){
+        //             return password.length>=8
+        //         },
+        //         message:"password must be at least 8 char long"
+        //     },
+        //     {
+        //         validator:function(password){
+        //              const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/;
+        //              return passwordRegex.test(password)
+        //         },
+        //         message:"Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character (@$!%*?&#)",
+        //     }
+        // ] 
+
+        // VALIDATION USING VALIDATOR LIB
+        validate(value){
+            if( !validator.isStrongPassword(value)){
+                
+            }
+        }
     },
     age:{
-        type:Number
+        type:Number,
+        required:true,
+        min:[18,"Minors can not login"],
+        // default:18
     },
+    sex:{
+        type:String,
+        enum:{
+             values:["female","male","others"],
+            message:"gender not found"
+        },
+        lowercase:true  
+    },
+    skills:{
+        type:[String]
+    }
+},{
+    timestamps:true
 });
+
 
  module.exports=mongoose.model("User",userSchema)

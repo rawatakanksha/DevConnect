@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const connectDb = require("./config/database");
 const User = require("./models/user");
+const { validateSignUp} = require("./utils/validation")
+const bcrypt=require("bcrypt")
 
 // app.use('/admin',authAdmin,(req,res)=>{
 //     res.send('welcome admin')
@@ -39,7 +41,7 @@ app.use(express.json());
 
 app.post("/signup", async (req, res) => {
   // dynamically adding data
-  const user = new User(req.body);
+//   const user = new User(req.body);
 
   // creating a new instance of user model(statically)
   // const user=new User({
@@ -49,14 +51,57 @@ app.post("/signup", async (req, res) => {
   //     emailId:'akanksha@gmail.com',
   //     password:'helllo@123'
   // });
+
   // saving data
   try {
+    // STEP 1 - VALIDATION
+     validateSignUp(req)
+
+    //  STEP 2 - ENCRYPT PASSWORD
+    const {password,fName,Lname,emailId,age}=req.body
+    const passwordHash=await bcrypt.hash(password,10)
+    console.log(passwordHash)
+
+    // STEP 3 - CREATING A NEW INSTANCE OF THE USER MODEL
+
+    const user=new User({
+        fName,
+        Lname,
+        emailId,
+        password: passwordHash,
+        age
+    })
+
+
+
     await user.save();
     res.send("User Added Sucessfully");
   } catch (err) {
-    res.status(400).send("error saving user:", err.message);
+    res.status(400).send("error saving user:"+ err.message);
   }
 });
+
+app.post("/login",async(req,res)=>{
+
+    try{
+     const {emailId,password}=req.body
+        const user=await User.find({emailId:emailId})
+        if(!user){
+            throw new Error("Invalid Credentials")
+        }
+        const isPassword= await bcrypt.compare(password,user.password)
+            if(isPassword){
+            res.send("Login Successful")
+        }
+        else{
+               throw new Error("Invalid Credentials")
+        }
+   
+    }
+    catch(err){
+        res.status(404).send("Error loging in")
+    }
+})
 
 // get multiple users by email
 app.get("/user", async (req, res) => {
@@ -118,15 +163,25 @@ app.delete("/users",async(req,res)=>{
     }
 })
 
-app.patch("/users",async(req,res)=>{
-    const userId= req.body.userId
+app.patch("/users/:usersId",async(req,res)=>{
+    const userId= req.params?.userId
     const data=req.body
-     try{
-       const user=await User.findOneAndUpdate({_id:userId},data)
+     try{ 
+        // API LEVEL validation for updating data
+        const ALLOWED_UPDATES=["fName","sex","age","password","skills"];
+        const isUpdateAllowed=Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k));
+        if(!isUpdateAllowed){
+            throw new Error("update not allowed")
+        }
+        if(data?.skills.length>20){
+            throw new Error("skill cannot be more than 20")
+        }
+
+       const user=await User.findOneAndUpdate({_id:userId},data, { runValidators: true })
        res.send("updated")
     }
     catch(err){
-       res.status(404).send("error updating")
+       res.status(404).send("error updating: "+err.message)
     }
 })
 
