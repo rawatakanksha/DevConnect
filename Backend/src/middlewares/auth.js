@@ -10,15 +10,12 @@ try{
     if(!user){
         throw new Error("Invalid User")
     }
-
     req.user=user;
     next();
 }
 catch(err){
  res.status(404).send("tokens not invalidated")
-}
-
-  
+}  
 };
 
 module.exports={

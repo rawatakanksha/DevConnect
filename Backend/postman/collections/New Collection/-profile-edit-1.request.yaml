@@ -1,5 +1,5 @@
 $kind: http-request
-name: /edit
+name: /profile/edit
 url: http://localhost:3000/profile/edit
 method: PATCH
 body:
@@ -13,4 +13,4 @@ body:
     \    \"skills\":[\"javascript\",\"css\"]\r
 
     }"
-order: 8000
+order: 9000
