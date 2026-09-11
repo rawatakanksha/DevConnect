@@ -1,0 +1,16 @@
+$kind: http-request
+name: /edit
+url: http://localhost:3000/profile/edit
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \        \"about\": \"This is default about\",\r
+
+    \    \"fName\": \"Icy\",\r
+
+    \    \"skills\":[\"javascript\",\"css\"]\r
+
+    }"
+order: 8000

@@ -14,6 +14,15 @@ const validateSignUp=(req)=>{
     }
 
 }
+
+const validateEditProfile=(req)=>{
+    const updateItem=["fName","Lname","age","sex","skills","about"]
+
+    const isUpdateAllowed=Object.keys(req.body).every((item)=>updateItem.includes(item))
+   return isUpdateAllowed;
+
+}
 module.exports={
-    validateSignUp
+    validateSignUp,
+    validateEditProfile
 }

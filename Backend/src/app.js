@@ -2,8 +2,10 @@ const express = require("express");
 const app = express();
 const connectDb = require("./config/database");
 const User = require("./models/user");
-const { validateSignUp} = require("./utils/validation")
-const bcrypt=require("bcrypt")
+
+const cookieParser =require("cookie-parser")
+const authRouter=require("./routes/auth")
+const profileRouter=require("./routes/profile")
 
 // app.use('/admin',authAdmin,(req,res)=>{
 //     res.send('welcome admin')
@@ -37,71 +39,15 @@ const bcrypt=require("bcrypt")
 
 // })
 
+// middlewares
 app.use(express.json());
-
-app.post("/signup", async (req, res) => {
-  // dynamically adding data
-//   const user = new User(req.body);
-
-  // creating a new instance of user model(statically)
-  // const user=new User({
-  //     // passing data
-  //     fName:'Akanksha',
-  //     Lname:'Rawat',
-  //     emailId:'akanksha@gmail.com',
-  //     password:'helllo@123'
-  // });
-
-  // saving data
-  try {
-    // STEP 1 - VALIDATION
-     validateSignUp(req)
-
-    //  STEP 2 - ENCRYPT PASSWORD
-    const {password,fName,Lname,emailId,age}=req.body
-    const passwordHash=await bcrypt.hash(password,10)
-    console.log(passwordHash)
-
-    // STEP 3 - CREATING A NEW INSTANCE OF THE USER MODEL
-
-    const user=new User({
-        fName,
-        Lname,
-        emailId,
-        password: passwordHash,
-        age
-    })
+app.use(cookieParser())
 
 
+app.use("/",authRouter)
+app.use("/",profileRouter)
 
-    await user.save();
-    res.send("User Added Sucessfully");
-  } catch (err) {
-    res.status(400).send("error saving user:"+ err.message);
-  }
-});
 
-app.post("/login",async(req,res)=>{
-
-    try{
-     const {emailId,password}=req.body
-        const user=await User.find({emailId:emailId})
-        if(!user){
-            throw new Error("Invalid Credentials")
-        }
-        const isPassword= await bcrypt.compare(password,user.password)
-            if(isPassword){
-            res.send("Login Successful")
-        }
-        else{
-               throw new Error("Invalid Credentials")
-        }
-   
-    }
-    catch(err){
-        res.status(404).send("Error loging in")
-    }
-})
 
 // get multiple users by email
 app.get("/user", async (req, res) => {
@@ -188,6 +134,8 @@ app.patch("/users/:usersId",async(req,res)=>{
 
 
 
+
+
 connectDb()
   .then(() => {
     console.log("db connected sucessfully");
@@ -199,14 +147,4 @@ connectDb()
     console.log("db not connected ", err);
   });
 
-// connectDb()
-//     .then(() => {
-//         console.log("Database connected successfully");
-//         app.listen(3000,()=>{
-//         console.log("port workink fine on 3000")
-// })
 
-//     })
-//     .catch((err) => {
-//         console.error("Database connection error details:", err); // <-- Look closely at what prints here
-//     });

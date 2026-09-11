@@ -1,30 +1,26 @@
-const authAdmin=(req,res,next)=>{
+const jwt=require('jsonwebtoken')
+const User=require("../models/user")
+const authUser=async(req,res,next)=>{
+try{
+    const {token}=req.cookies;
+    const decoded=await jwt.verify(token,"DevConnect@123");
+    const {_id}=decoded
+    const user = await User.findById(_id);
 
-    const token="xyz";
-    const isAdmin= token==='xyz';
+    if(!user){
+        throw new Error("Invalid User")
+    }
 
-    if(!isAdmin){
-        res.status(401).send("invealid user")
-    }
-    else{
-       next()
-    }
-};
-const authUser=(req,res,next)=>{
+    req.user=user;
+    next();
+}
+catch(err){
+ res.status(404).send("tokens not invalidated")
+}
 
-    const token="xyz";
-    const isAdmin= token==='xyz';
-
-    if(!isAdmin){
-        res.status(401).send("invealid user")
-    }
-    else{
-       next()
-    }
+  
 };
 
-module.export={
-    authAdmin,
+module.exports={
     authUser
-
 }

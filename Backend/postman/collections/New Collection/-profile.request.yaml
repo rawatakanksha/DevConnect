@@ -1,0 +1,8 @@
+$kind: http-request
+name: /profile
+url: http://localhost:3000/profile/view
+method: GET
+body:
+  type: json
+  content: ""
+order: 6000
