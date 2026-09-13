@@ -1,0 +1,20 @@
+$kind: http-request
+name: request/send/status/useriD
+url: http://localhost:3000/request/send/interested/6a9c513de7273d6e9f6a5382
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \     \r
+
+    \        \"fName\":\"Akanksha\",\r
+
+    \        \"Lname\":\"Rawat\",\r
+
+    \        \"emailId\":\"akanksha@gmail.com\",\r
+
+    \        \"password\":\"helllo@123\"\r
+
+    \    }"
+order: 8546

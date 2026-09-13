@@ -36,7 +36,7 @@ profileRouter.patch("/profile/edit",authUser,async(req,res)=>{
   }
 })
 
-profileRouter.patch("/profile/password",async(req,res)=>{
+profileRouter.patch("/profile/password",authUser,async(req,res)=>{
  try{
    const{currentPassword,newPassword}=req.body
    const loggedUser=req.body

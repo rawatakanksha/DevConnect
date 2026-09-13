@@ -30,6 +30,7 @@ const connectionReq=this;
 if(connectionReq.fromUserId.equals(this.toUserId)){
     throw new Error("Can not send reuest to yourself")
 }
+next()
 })
 
 const connectionReqModel=new mongoose.model("ConnectionReq",connectionReqSchema);

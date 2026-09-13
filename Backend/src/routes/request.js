@@ -38,11 +38,46 @@ reqRouter.post("/request/send/:status/:userId", authUser, async (req, res) => {
     });
     const connectionData = await connectionRequest.save();
 
-    res.jeon({status,
+    res.json({message: 'Request- '+ status,
         connectionData
     });
   } catch (err) {
     res.status(404).send("error connecting" + err.message);
   }
 });
+
+reqRouter.post("/request/review/:status/:reqId",authUser,async(req,res)=>{
+try{
+    const{status,reqId}=req.params;
+    const loggedUser=req.user;
+
+    const allowedStatus=["accepted","rejected"]
+    if(!allowedStatus.includes(status)){
+        return res.status(400).json({message:"Status Not ALLOWES"})
+    }
+
+    const connectionReq=await ConnectionReq.findOne({
+        _id:reqId,
+        status:"interested",
+        toUserId:loggedUser._id
+    });
+
+    if(!connectionReq){
+       return res.status(400).json({message:"Connection req not found"})
+    }
+    connectionReq.status=status;
+    const reqData=connectionReq.save();
+    res.json({
+        message:"connection req accepted",
+        reqData
+    })
+}
+catch(err){
+    res.status(404).send("Connection failed "+err.message )
+}
+
+
+
+
+})
 module.exports = reqRouter;
