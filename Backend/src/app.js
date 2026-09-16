@@ -7,6 +7,7 @@ const cookieParser =require("cookie-parser")
 const authRouter=require("./routes/auth")
 const profileRouter=require("./routes/profile")
 const reqRouter=require("./routes/request")
+const userReqRouter=require("./routes/userReq")
 
 // app.use('/admin',authAdmin,(req,res)=>{
 //     res.send('welcome admin')
@@ -48,6 +49,7 @@ app.use(cookieParser())
 app.use("/",authRouter)
 app.use("/",profileRouter)
 app.use("/",reqRouter)
+app.use("/",userReqRouter)
 
 
 
@@ -83,15 +85,15 @@ app.get("/users", async (req, res) => {
 });
 
 // Feed API -get all the users from database
-app.get("/feed", async(req,res)=>{
-    try{
-        const users=await User.find({})
-        res.send(users)
-    }
-    catch(err){
-        res.status(404).send("error fetching users",err)
-    }
-})
+// app.get("/feed", async(req,res)=>{
+//     try{
+//         const users=await User.find({})
+//         res.send(users)
+//     }
+//     catch(err){
+//         res.status(404).send("error fetching users",err)
+//     }
+// })
 
 // delete api
 app.delete("/users",async(req,res)=>{

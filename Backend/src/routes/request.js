@@ -66,7 +66,7 @@ try{
        return res.status(400).json({message:"Connection req not found"})
     }
     connectionReq.status=status;
-    const reqData=connectionReq.save();
+    const reqData= await connectionReq.save();
     res.json({
         message:"connection req accepted",
         reqData

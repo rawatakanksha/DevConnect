@@ -1,0 +1,20 @@
+$kind: http-request
+name: /user/requests/recieved
+url: http://localhost:3000/user/requests/recieved
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \     \r
+
+    \        \"fName\":\"Akanksha\",\r
+
+    \        \"Lname\":\"Rawat\",\r
+
+    \        \"emailId\":\"akanksha@gmail.com\",\r
+
+    \        \"password\":\"helllo@123\"\r
+
+    \    }"
+order: 10000

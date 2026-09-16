@@ -25,12 +25,11 @@ const connectionReqSchema=new mongoose.Schema({
 
 connectionReqSchema.index({fromUserId:1,toUserId:1})
 
-connectionReqSchema.pre("save",function(next){
+connectionReqSchema.pre("save",async function(){
 const connectionReq=this;
 if(connectionReq.fromUserId.equals(this.toUserId)){
     throw new Error("Can not send reuest to yourself")
 }
-next()
 })
 
 const connectionReqModel=new mongoose.model("ConnectionReq",connectionReqSchema);
