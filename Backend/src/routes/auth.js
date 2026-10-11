@@ -7,18 +7,6 @@ const User=require("../models/user")
 
 
 authRouter.post("/signup", async (req, res) => {
-  // dynamically adding data
-//   const user = new User(req.body);
-
-  // creating a new instance of user model(statically)
-  // const user=new User({
-  //     // passing data
-  //     fName:'Akanksha',
-  //     Lname:'Rawat',
-  //     emailId:'akanksha@gmail.com',
-  //     password:'helllo@123'
-  // });
-
   // saving data
   try {
     // STEP 1 - VALIDATION
@@ -30,7 +18,6 @@ authRouter.post("/signup", async (req, res) => {
     console.log(passwordHash)
 
     // STEP 3 - CREATING A NEW INSTANCE OF THE USER MODEL
-
     const user=new User({
         fName,
         Lname,
@@ -66,7 +53,7 @@ authRouter.post("/login",async(req,res)=>{
             // Add Token to cookie and send the response back to user
                res.cookie("token",token)
 
-                res.send("Login Successful")
+                res.send(user)
         }
         else{
                throw new Error("Invalid Credentials")
