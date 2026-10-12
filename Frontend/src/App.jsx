@@ -6,6 +6,8 @@ import Login from './components/Login'
 import Footer from './components/Footer'
 import appStore from './utils/appStore'
 import {Provider} from "react-redux"
+import Profile from './components/Profile'
+import Feed from './components/Feed'
 
 function AppLayout(){
 return(
@@ -32,6 +34,14 @@ function App() {
      {
       path:"/login",
       element:<Login/>
+     },
+     {
+      path:"/profile/view",
+      element:<Profile/>
+     },
+     {
+      path:"/feed",
+      element:<Feed/>
      }
     ]
   }

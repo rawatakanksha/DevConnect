@@ -3,6 +3,10 @@ const User=require("../models/user")
 const authUser=async(req,res,next)=>{
 try{
     const {token}=req.cookies;
+
+    if(!token){
+      return res.status(401).send("Please Log In")
+    }
     const decoded=await jwt.verify(token,"DevConnect@123");
     const {_id}=decoded
     const user = await User.findById(_id);
