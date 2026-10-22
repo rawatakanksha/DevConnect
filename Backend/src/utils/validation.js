@@ -16,7 +16,7 @@ const validateSignUp=(req)=>{
 }
 
 const validateEditProfile=(req)=>{
-    const updateItem=["fName","Lname","age","sex","skills","about"]
+    const updateItem=["fName","Lname","age","sex","skills","about","photo"]
 
     const isUpdateAllowed=Object.keys(req.body).every((item)=>updateItem.includes(item))
    return isUpdateAllowed;

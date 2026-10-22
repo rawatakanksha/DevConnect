@@ -19,9 +19,9 @@ const Login = () => {
         },{
             withCredentials:true
         })
-    console.log("login succesful",response);
+    // console.log("login succesful",response);
     dispatch(addUser(response.data));
-    return navigate("/");
+    return navigate("/feed");
     }
         catch(err){
             console.error(err)
@@ -33,7 +33,7 @@ const Login = () => {
    <div className='flex justify-center items-center h-full scroll-auto'>
    <div className="card bg-base-200 w-96 shadow-sm ">
   <div className="card-body">
-    <h2 className="card-title m-2 justify-center">Card Title</h2>
+    <h2 className="card-title m-2 justify-center">Log In</h2>
     <div className="card-actions justify-center">
         <input value={emailId} onChange={(e)=>setEmailId(e.target.value)} type="text" placeholder="Email" className="input m-2 input-primary" />
         <input value={password} onChange={(e)=>setPassword(e.target.value)} type="text" placeholder="Password" className="input m-2 input-primary" />
@@ -48,3 +48,4 @@ const Login = () => {
 }
 
 export default Login
+
